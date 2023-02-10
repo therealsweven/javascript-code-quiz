@@ -1,0 +1,17 @@
+:root {
+  --blue: #3330e4;
+  --pink: #f637ec;
+  --orange: #fbb454;
+  --yellow: #faea48;
+}
+
+body {
+  background-color: var(--yellow);
+}
+
+header {
+  background-color: var(--blue);
+  color: var(--pink);
+  text-align: center;
+  padding: 2%;
+}
