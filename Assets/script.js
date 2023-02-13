@@ -3,6 +3,9 @@ var startQuiz = document.querySelector("#start");
 console.log(startQuiz);
 var countdownEl = document.getElementById("countdown");
 var quizEl = document.getElementById("quiz");
+var questionEl = document.createElement("p");
+var answersEl = document.createElement("p");
+//var questionEl = document.createElement("p");
 var Questions = [
   {
     question: "Who invented JavaScript?",
@@ -68,56 +71,66 @@ var Questions = [
     correctAnswer: "d",
   },
 ]; //Question Bank
+var numCorrect = 0;
+
+// var aBut = document.createElement("button");
+// var bBut = document.createElement("button");
+// var cBut = document.createElement("button");
+// var dBut = document.createElement("button");
+// aBut, bBut, cBut, dBut.setAttribute("class", "option");
+// aBut, bBut, cBut, dBut.setAttribute("class", "option");
+
+//preventDefault();
+var aBut = document.querySelector("#A");
+var bBut = document.querySelector("#B");
+var cBut = document.querySelector("#C");
+var dBut = document.querySelector("#D");
+
+function runQuiz() {
+  console.log(Questions[0].question);
+  console.log(Questions[0].answers[(0, "a")]);
+
+  for (i = 0; i < Questions.length; i++) {
+    questionEl.textContent = Questions[i].question;
+    aBut.textContent = "a. " + Questions[i].answers[(i, "a")];
+    bBut.textContent = "b. " + Questions[i].answers[(i, "b")];
+    cBut.textContent = "c. " + Questions[i].answers[(i, "c")];
+    dBut.textContent = "d. " + Questions[i].answers[(i, "d")];
+    quizEl.append(questionEl, aBut, bBut, cBut, dBut);
+    function choose() {
+      alert("You have selected an option");
+    }
+    aBut.addEventListener("click", choose);
+    bBut.addEventListener("click", choose);
+    cBut.addEventListener("click", choose);
+    dBut.addEventListener("click", choose);
+
+    //Grade Question
+    // function grade()
+    //Set correct answer
+    var correctAns = Questions[i].correctAnswer;
+    console.log(correctAns);
+
+    console.log(aBut);
+    console.log(bBut);
+    console.log(cBut);
+    console.log(dBut);
+    // quizEl.appendChild(answersEl);
+  }
+}
 
 function countdown() {
   document.getElementById("start").style.display = "none"; //disappear start button
-  document.getElementById("submit").style.display = "block"; //appear submit button
-  var timeRemaining = 60;
+  var timeRemaining = 75;
 
   var timeInterval = setInterval(function () {
     timeRemaining--;
-    countdownEl.textContent = timeRemaining + " seconds remaining";
+    countdownEl.textContent = "Time: " + timeRemaining + " seconds";
     if (timeRemaining === 0) {
       clearInterval(timeInterval);
     }
   }, 1000);
+  runQuiz();
 }
 
-function runQuiz() {
-  // variable to store the HTML output
-  const output = [];
-
-  // for each question...
-  Questions.forEach((currentQuestion, questionNumber) => {
-    // variable to store the list of possible answers
-    const answers = [];
-
-    // and for each available answer...
-    for (letter in currentQuestion.answers) {
-      // ...add an HTML radio button
-      answers.push(
-        `<label>
-              <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-            </label>`
-      );
-    }
-
-    // add this question and its answers to the output
-    output.push(
-      `<div class="question"> ${currentQuestion.question} </div>
-          <div class="answers"> ${answers.join("")} </div>`
-    );
-  });
-
-  // finally combine our output list into one string of HTML and put it on the page
-  quizContainer.innerHTML = output.join("");
-}
-// function showResults() {}
-
-// const quizContainer = document.getElementById("quiz");
-// const resultsContainer = document.getElementById("results");
-// const submitButton = document.getElementById("submit");
-
-// runQuiz();
+startQuiz.addEventListener("click", countdown);

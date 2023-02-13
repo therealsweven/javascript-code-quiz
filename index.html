@@ -4,20 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./Assets/reset.css" />
     <link rel="stylesheet" href="./Assets/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
     <title>Code Quiz</title>
   </head>
   <body>
     <header>
+      <a>View High Scores</a>
       <h1>JavaScript Code Quiz</h1>
-      <h2 id="countdown"></h2>
+      <p id="countdown">Tim: 75 seconds</p>
     </header>
-    <div class="quiz">
-      <p>This is where the quiz will go.</p>
-    </div>
-    <button id="start" type="submit" onclick="countdown()">Start Quiz</button>
-    <button id="submit">Submit Quiz</button>
-    <div id="results"></div>
+
+    <div class="back">
+      <p id="quiz">
+
+      <button class="option" id="A" ></button>
+      <button class="option" id="B" ></button>
+      <button class="option" id="C" ></button>
+      <button class="option" id="D" ></button>
+      <button id="start" type="submit">Start Quiz</button>
+    </p><div id="results"></div>
     <script src="./Assets/script.js"></script>
   </body>
 </html>
