@@ -7,6 +7,7 @@
 
 body {
   background-color: var(--yellow);
+  justify-content: center;
 }
 
 header {
@@ -14,4 +15,29 @@ header {
   color: var(--pink);
   text-align: center;
   padding: 2%;
+  margin-bottom: 3%;
+}
+
+#start {
+  display: block;
+  background: white;
+  border: var(--blue) solid 5px;
+  justify-self: center;
+  padding: 1%;
+  border-radius: 10px;
+}
+
+#submit {
+  display: none;
+  background: white;
+  border: var(--blue) solid 5px;
+  justify-content: center;
+  padding: 1%;
+  border-radius: 10px;
+}
+
+.quiz {
+  max-width: 100%;
+  border: var(--blue) solid 5px;
+  background: white;
 }
