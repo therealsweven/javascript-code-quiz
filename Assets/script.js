@@ -1,11 +1,11 @@
 // const submitButton = document.getElementById("submit");
+var timeRemaining = 75;
 var startQuiz = document.querySelector("#start");
 console.log(startQuiz);
 var countdownEl = document.getElementById("countdown");
 var quizEl = document.getElementById("quiz");
 var questionEl = document.createElement("p");
 var answersEl = document.createElement("p");
-//var questionEl = document.createElement("p");
 var Questions = [
   {
     question: "Who invented JavaScript?",
@@ -72,62 +72,101 @@ var Questions = [
   },
 ]; //Question Bank
 var numCorrect = 0;
-
-// var aBut = document.createElement("button");
-// var bBut = document.createElement("button");
-// var cBut = document.createElement("button");
-// var dBut = document.createElement("button");
-// aBut, bBut, cBut, dBut.setAttribute("class", "option");
-// aBut, bBut, cBut, dBut.setAttribute("class", "option");
+var numTotal = Questions.length;
+var questions = Questions.map(({ question }) => question);
+var answers = Questions.map(({ answers }) => answers);
+var correctAnswers = Questions.map(({ correctAnswer }) => correctAnswer);
+var resultsEl = document.getElementById("results");
+var scoreEl = document.createElement("p");
+// console.log(questions);
+// console.log(answers);
+// console.log(correctAnswers);
 
 //preventDefault();
-var aBut = document.querySelector("#A");
-var bBut = document.querySelector("#B");
-var cBut = document.querySelector("#C");
-var dBut = document.querySelector("#D");
+var aBut = document.querySelector("#a");
+var bBut = document.querySelector("#b");
+var cBut = document.querySelector("#c");
+var dBut = document.querySelector("#d");
+let i = 0;
 
 function runQuiz() {
-  console.log(Questions[0].question);
-  console.log(Questions[0].answers[(0, "a")]);
+  // for (i = 0; i < Questions.length; ) {
+  // console.log(answers);
+  // console.log(Questions);
+  questionEl.textContent = questions[i];
+  console.log(questions[i]);
 
-  for (i = 0; i < Questions.length; i++) {
-    questionEl.textContent = Questions[i].question;
-    aBut.textContent = "a. " + Questions[i].answers[(i, "a")];
-    bBut.textContent = "b. " + Questions[i].answers[(i, "b")];
-    cBut.textContent = "c. " + Questions[i].answers[(i, "c")];
-    dBut.textContent = "d. " + Questions[i].answers[(i, "d")];
-    quizEl.append(questionEl, aBut, bBut, cBut, dBut);
-    function choose() {
-      alert("You have selected an option");
+  var theseAnswers = [answers[i].a, answers[i].b, answers[i].c, answers[i].d];
+  console.log(theseAnswers);
+  aBut.textContent = theseAnswers[0];
+  bBut.textContent = theseAnswers[1];
+  cBut.textContent = theseAnswers[2];
+  dBut.textContent = theseAnswers[3];
+  answersEl.append(questionEl, aBut, bBut, cBut, dBut);
+  quizEl.append(questionEl, answersEl);
+  function choose(event) {
+    event.stopPropagation();
+    // event.preventDefault();
+    var element = event.target;
+    if (element.matches("button")) {
+      // alert("You have selected an option");
+      console.log(event.target.id);
+      console.log(correctAnswers[i]);
+
+      //Grade Question
+      function grade() {
+        event.stopPropagation();
+        // event.preventDefault();
+        if (event.target.id === correctAnswers[i]) {
+          numCorrect += 1;
+          console.log(numCorrect);
+        } else if (event.target.id !== correctAnswers[i]) {
+          numCorrect = numCorrect;
+          console.log(numCorrect);
+          timeRemaining -= 5;
+        }
+      }
+      grade();
+
+      if (i < Questions.length) {
+        theseAnswers = ["", "", "", ""];
+        i = i + 1;
+        console.log(i);
+        runQuiz();
+      } else {
+        //if i is at number of questions move to showResults() and zero timer
+        timeRemaining = 1;
+      }
     }
-    aBut.addEventListener("click", choose);
-    bBut.addEventListener("click", choose);
-    cBut.addEventListener("click", choose);
-    dBut.addEventListener("click", choose);
-
-    //Grade Question
-    // function grade()
-    //Set correct answer
-    var correctAns = Questions[i].correctAnswer;
-    console.log(correctAns);
-
-    console.log(aBut);
-    console.log(bBut);
-    console.log(cBut);
-    console.log(dBut);
-    // quizEl.appendChild(answersEl);
   }
+  answersEl.addEventListener("click", choose);
 }
+// }
+function showResults() {
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("results").style.display = "block";
+  document.getElementById("results").textContent =
+    "You got " + numCorrect + "/" + numTotal + " questions correct.";
+}
+
+// console.log(correctAns);
+
+// console.log(aBut);
+// console.log(bBut);
+// console.log(cBut);
+// console.log(dBut);
 
 function countdown() {
   document.getElementById("start").style.display = "none"; //disappear start button
-  var timeRemaining = 75;
+  document.getElementById("quiz").style.display = "flex"; //appear quiz element
+  document.getElementById("quiz").style.flexDirection = "column"; //change flex-direction
 
   var timeInterval = setInterval(function () {
     timeRemaining--;
     countdownEl.textContent = "Time: " + timeRemaining + " seconds";
     if (timeRemaining === 0) {
       clearInterval(timeInterval);
+      showResults();
     }
   }, 1000);
   runQuiz();

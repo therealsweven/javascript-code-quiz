@@ -45,7 +45,18 @@ button {
   justify-self: center;
   padding: 1%;
   border-radius: 10px;
-  margin: 1%;
+  margin: 0.5%;
+  width: 100%;
+}
+button#start {
+  display: block;
+  background: white;
+  border: var(--pink) solid 5px;
+  justify-self: center;
+  padding: 1%;
+  border-radius: 10px;
+  margin: 0.5%;
+  width: 20%;
 }
 
 button:hover {
@@ -69,8 +80,9 @@ button:hover {
   padding: 3%;
   margin: 1%;
   font-size: 25px;
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
+  display: none;
 }
 
 .back {
@@ -79,4 +91,12 @@ button:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+#results {
+  background: white;
+  margin: 2%;
+  padding: 1%;
+  font-size: 30px;
+  display: none;
 }
