@@ -112,10 +112,8 @@ function runQuiz() {
   function choose(event) {
     event.stopPropagation();
 
-    //var event.target = event.target;
-
     if (event.target.matches("button")) {
-      console.log(element.textContent);
+      console.log(event.target.textContent);
       console.log(correctAnswers[i]);
 
       function grade() {
@@ -124,28 +122,38 @@ function runQuiz() {
         if (event.target.textContent === correctAnswers[i]) {
           numCorrect += 1; //add one to correct score
           console.log(numCorrect);
-          alert("You are corrrect");
+          // alert("You are corrrect");
         } else if (event.target.textContent !== correctAnswers[i]) {
           console.log(numCorrect);
           timeRemaining -= 5;
-          alert("Incorrrect!");
+          // alert("Incorrrect!");
         }
       }
       //if not at last question, iterate
       function iterate() {
         if (i < Questions.length) {
-          i = i + 1;
+          i++;
+          displayQandA();
         } else {
           //if i is at total number of questions move to showResults() and zero timer
           timeRemaining = 1;
+          return;
         }
       }
       //Grade Question
       grade();
       //Iterate if not on last question
-      iterate();
+      // iterate();
+      if (i < questions.length) {
+        i++;
+        displayQandA();
+      } else {
+        //if i is at total number of questions move to showResults() and zero timer
+        timeRemaining = 1;
+        return;
+      }
+      // }
     }
-    runQuiz();
   }
 }
 

@@ -9,10 +9,12 @@ var aBut = document.querySelector("#a");
 var bBut = document.querySelector("#b");
 var cBut = document.querySelector("#c");
 var dBut = document.querySelector("#d");
+var resultsEl = document.getElementById("results");
 
 // Declaring variables as js created elements of a paragraph type
 var questionEl = document.createElement("p");
 var answersEl = document.createElement("p");
+var scoreEl = document.createElement("p");
 
 //Question Bank
 var Questions = [
@@ -61,25 +63,17 @@ var Questions = [
     correctAnswer: "console",
   },
 ];
-var numCorrect = 0;
-var numTotal = Questions.length;
-console.log(numTotal);
-var questions = Questions.map(({ question }) => question);
-var answers = Questions.map(({ answers }) => answers);
-console.log(answers);
-var correctAnswers = Questions.map(({ correctAnswer }) => correctAnswer);
-console.log(correctAnswers);
-var resultsEl = document.getElementById("results");
-var scoreEl = document.createElement("p");
-var theseAnswers = ["", "", "", ""];
+
+var numCorrect = 0; //number of questions correct
+var numTotal = Questions.length; //total number of questions
+var questions = Questions.map(({ question }) => question); //questions array
+var answers = Questions.map(({ answers }) => answers); //answers array
+var correctAnswers = Questions.map(({ correctAnswer }) => correctAnswer); //correct answers array
+var theseAnswers = ["", "", "", ""]; //empty current question answers array
 
 let i = 0;
 
 function run() {
-  document.getElementById("start").style.display = "none"; //disappear start button
-  document.getElementById("quiz").style.display = "flex"; //appear quiz element
-  document.getElementById("quiz").style.flexDirection = "column"; //change flex-direction
-
   //start countdown
   var timeInterval = setInterval(function () {
     timeRemaining--;
@@ -91,64 +85,82 @@ function run() {
     }
   }, 1000);
 
+  document.getElementById("start").style.display = "none"; //disappear start button
+  document.getElementById("quiz").style.display = "flex"; //appear quiz element
+  document.getElementById("quiz").style.flexDirection = "column"; //change flex-direction
+
   runQuiz();
 }
-
 function runQuiz() {
-  // for (i = 0; i < Questions.length; ) {
-  // console.log(answers);
-  // console.log(Questions);
+  displayQandA();
+  answersEl.addEventListener("click", choose);
+  function choose(event) {
+    if (event.target.matches("button")) {
+      console.log(event.target.textContent);
+      console.log(correctAnswers[i]);
+      i++;
+      displayQandA();
+    }
+  }
+}
+
+function displayQandA() {
   questionEl.textContent = questions[i];
-  console.log(questions[i]);
 
   theseAnswers = answers[i];
-  console.log(theseAnswers);
+
   aBut.textContent = theseAnswers[0];
   bBut.textContent = theseAnswers[1];
   cBut.textContent = theseAnswers[2];
   dBut.textContent = theseAnswers[3];
   answersEl.append(questionEl, aBut, bBut, cBut, dBut);
   quizEl.append(questionEl, answersEl);
-  answersEl.addEventListener("click", choose);
-  function choose(event) {
-    event.stopPropagation();
-    // event.preventDefault();
-    var element = event.target;
-    if (element.matches("button")) {
-      console.log(event.target.textContent);
-      console.log(correctAnswers[i]);
-
-      function grade() {
-        event.stopPropagation();
-        event.preventDefault();
-        if (event.target.textContent === correctAnswers[i]) {
-          numCorrect += 1; //add one to correct score
-          console.log(numCorrect);
-          alert("You are corrrect");
-        } else if (event.target.textContent !== correctAnswers[i]) {
-          console.log(numCorrect);
-          timeRemaining -= 5;
-          alert("Incorrrect!");
-        }
-      }
-      //if not at last question, iterate
-      function iterate() {
-        if (i < Questions.length) {
-          i = i + 1;
-          // console.log(i);
-        } else {
-          //if i is at total number of questions move to showResults() and zero timer
-          timeRemaining = 1;
-        }
-      }
-      //Grade Question
-      grade();
-      //Iterate if not on last question
-      iterate();
-    }
-    runQuiz();
-  }
 }
+// function runQuiz() {
+//   //Show question and answer
+//   displayQandA();
+
+//   //wait for user response
+//   answersEl.addEventListener("click", choose);
+//   function choose(event) {
+//     event.stopPropagation();
+
+//     if (event.target.matches("button")) {
+//       console.log(event.target.textContent);
+//       console.log(correctAnswers[i]);
+
+//       function grade() {
+//         event.stopPropagation();
+//         event.preventDefault();
+//         if (event.target.textContent === correctAnswers[i]) {
+//           numCorrect += 1; //add one to correct score
+//           console.log(numCorrect);
+//           alert("You are corrrect");
+//         } else if (event.target.textContent !== correctAnswers[i]) {
+//           console.log(numCorrect);
+//           timeRemaining -= 5;
+//           alert("Incorrrect!");
+//         }
+//       }
+//       //if not at last question, iterate
+//       function iterate() {
+//         if (i < Questions.length) {
+//           i = i + 1;
+//         } else {
+//           //if i is at total number of questions move to showResults() and zero timer
+//           timeRemaining = 1;
+//         }
+//       }
+//       //Grade Question
+//       grade();
+//       //Iterate if not on last question
+//       iterate();
+//       // }
+//       runQuiz();
+//     }
+//   }
+// }
+
 // }
 function showResults() {
   document.getElementById("quiz").style.display = "none";
