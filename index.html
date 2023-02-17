@@ -16,9 +16,9 @@
   </head>
   <body>
     <header>
-      <a>View High Scores</a>
+      <p id="viewHS">View High Scores</p>
       <h1>JavaScript Code Quiz</h1>
-      <p id="countdown">Tim: 75 seconds</p>
+      <p id="countdown">Time: 75 seconds</p>
     </header>
 
     <div class="back">
@@ -39,6 +39,10 @@
           <input id = "input" type="text" name = "initials">
           <button id = "submitInitials">Submit </button>
         </form>
+      </div>
+      <div id="high-scores">
+        <h1>High Scores</h1>
+        <ol id="high-scores-list"></ol>
       </div>
     <script src="./Assets/script.js"></script>
   </body>

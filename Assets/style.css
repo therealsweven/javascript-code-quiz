@@ -100,3 +100,14 @@ button:hover {
   font-size: 30px;
   display: none;
 }
+
+#high-scores {
+  background: white;
+  margin: 2%;
+  padding: 1%;
+  font-size: 30px;
+  display: none;
+}
+/* #high-scores-list {
+  
+} */

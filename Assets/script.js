@@ -11,6 +11,8 @@ var cBut = document.querySelector("#c");
 var dBut = document.querySelector("#d");
 var resultsEl = document.getElementById("results");
 var tellScore = document.querySelector("#tellScore");
+var HSContainer = document.querySelector("#high-scores");
+var highScoresList = document.querySelector("#high-scores-list");
 
 // Declaring variables as js created elements of a paragraph type
 var questionEl = document.createElement("p");
@@ -64,6 +66,7 @@ var Questions = [
     correctAnswer: "console",
   },
 ];
+console.log(Questions);
 
 var numCorrect = 0; //number of questions correct
 var numTotal = Questions.length; //total number of questions
@@ -73,8 +76,6 @@ var questions = Questions.map(({ question }) => question); //questions array
 var answers = Questions.map(({ answers }) => answers); //answers array
 var correctAnswers = Questions.map(({ correctAnswer }) => correctAnswer); //correct answers array
 var theseAnswers = ["", "", "", ""]; //empty current question answers array
-
-//create local storage object
 
 let i = 0;
 
@@ -132,11 +133,14 @@ function runQuiz() {
           // alert("Incorrrect!");
         }
       }
-
+      //function to iterate through the questions
       function iterate() {
         if (i === questions.length - 1) {
           //calculate score and save to local storage
           finalScore = timeRemaining * numCorrect;
+          if (finalScore < 0) {
+            finalScore = 0;
+          }
           //if i is at total number of questions move to showResults() and zero timer
           timeRemaining = 1;
         } else {
@@ -153,6 +157,29 @@ function runQuiz() {
   }
 }
 
+// function to show high scores page
+function showHighScores() {
+  resultsEl.style.display = "none";
+  quizEl.style.display = "none";
+  startQuiz.style.display = "none";
+  HSContainer.style.display = "flex";
+  HSContainer.style.flexDirection = "column";
+  var highScoresStorage = [JSON.parse(localStorage.getItem("highScores"))];
+  console.log(highScoresStorage);
+  console.log(highScoresStorage[0].score);
+  for (j = 0; j < highScoresStorage.length; j++) {
+    HSListItem = document.createElement("li");
+    HSListItem.textContent =
+      j +
+      1 +
+      ".  " +
+      highScoresStorage[j].initials +
+      "          " +
+      highScoresStorage[j].score;
+    highScoresList.append(HSListItem);
+  }
+}
+//function to show results and score
 function showResults() {
   quizEl.style.display = "none";
   resultsEl.style.display = "flex";
@@ -165,26 +192,43 @@ function showResults() {
     " questions correct.  You're final score is " +
     finalScore +
     "!";
+  //function to grab user input for name and save the score to local storage in an object with the name
   function getUserInfo() {
     var formEl = document.querySelector("#userInput");
     var instructions = document.querySelector("#instructions");
     var userInput = document.querySelector("#input");
     var submitInitialsBtn = document.querySelector("#submitInitials");
     instructions.textContent = "Please enter your initials:  ";
-
+    //event listener to listen for submit on the name input
     submitInitialsBtn.addEventListener("click", function (event) {
       event.preventDefault();
       userInitials = userInput.value;
+      var highScoresString = localStorage.getItem("highScores");
+      console.log(highScoresString);
       var userInfo = {
         initials: userInitials.trim(),
         score: finalScore,
       };
-      var currentHS = localStorage.getItem("userInfo");
-      var newHS = currentHS.concat(userInfo);
-      localStorage.setItem("userInfo", JSON.stringify(newHS));
+      if (highScoresString === null) {
+        localStorage.setItem("highScores", JSON.stringify(userInfo));
+      } else {
+        var highScores = [JSON.parse(highScoresString)];
+        console.log(highScores);
+
+        var newHighScores = highScores.concat(userInfo);
+        console.log(newHighScores);
+        localStorage.setItem("highScores", JSON.stringify(newHighScores));
+      }
+      showHighScores();
     });
   }
+
   getUserInfo();
 }
 
+//listen for start
 startQuiz.addEventListener("click", run);
+
+//listen for high scores request
+viewHS = document.querySelector("#viewHS");
+viewHS.addEventListener("click", showHighScores);
