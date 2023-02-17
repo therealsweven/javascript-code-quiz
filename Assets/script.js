@@ -10,6 +10,7 @@ var bBut = document.querySelector("#b");
 var cBut = document.querySelector("#c");
 var dBut = document.querySelector("#d");
 var resultsEl = document.getElementById("results");
+var tellScore = document.querySelector("#tellScore");
 
 // Declaring variables as js created elements of a paragraph type
 var questionEl = document.createElement("p");
@@ -66,10 +67,14 @@ var Questions = [
 
 var numCorrect = 0; //number of questions correct
 var numTotal = Questions.length; //total number of questions
+var finalScore; //Will be numCorrect * timeRemaining
+var userInitials = "";
 var questions = Questions.map(({ question }) => question); //questions array
 var answers = Questions.map(({ answers }) => answers); //answers array
 var correctAnswers = Questions.map(({ correctAnswer }) => correctAnswer); //correct answers array
 var theseAnswers = ["", "", "", ""]; //empty current question answers array
+
+//create local storage object
 
 let i = 0;
 
@@ -85,11 +90,15 @@ function run() {
     }
   }, 1000);
 
-  document.getElementById("start").style.display = "none"; //disappear start button
-  document.getElementById("quiz").style.display = "flex"; //appear quiz element
-  document.getElementById("quiz").style.flexDirection = "column"; //change flex-direction
-
-  runQuiz();
+  startQuiz.style.display = "none"; //disappear start button
+  quizEl.style.display = "flex"; //appear quiz element
+  quizEl.style.width = "90%";
+  quizEl.style.flexDirection = "column"; //change flex-direction
+  if (i < questions.length) {
+    runQuiz();
+  } else {
+    timeRemaining = 0;
+  }
 }
 function displayQandA() {
   questionEl.textContent = questions[i];
@@ -103,66 +112,79 @@ function displayQandA() {
   answersEl.append(questionEl, aBut, bBut, cBut, dBut);
   quizEl.append(questionEl, answersEl);
 }
+
 function runQuiz() {
   //Show question and answer
   displayQandA();
-
   //wait for user response
   answersEl.addEventListener("click", choose);
   function choose(event) {
-    event.stopPropagation();
-
+    //make sure user clicks an answer button
     if (event.target.matches("button")) {
-      console.log(event.target.textContent);
-      console.log(correctAnswers[i]);
-
       function grade() {
-        event.stopPropagation();
-        event.preventDefault();
         if (event.target.textContent === correctAnswers[i]) {
           numCorrect += 1; //add one to correct score
           console.log(numCorrect);
           // alert("You are corrrect");
         } else if (event.target.textContent !== correctAnswers[i]) {
           console.log(numCorrect);
-          timeRemaining -= 5;
+          timeRemaining -= 10;
           // alert("Incorrrect!");
         }
       }
-      //if not at last question, iterate
+
       function iterate() {
-        if (i < Questions.length) {
-          i++;
-          displayQandA();
-        } else {
+        if (i === questions.length - 1) {
+          //calculate score and save to local storage
+          finalScore = timeRemaining * numCorrect;
           //if i is at total number of questions move to showResults() and zero timer
           timeRemaining = 1;
-          return;
+        } else {
+          i++;
+          console.log(i);
+          displayQandA();
         }
       }
       //Grade Question
       grade();
       //Iterate if not on last question
-      // iterate();
-      if (i < questions.length) {
-        i++;
-        displayQandA();
-      } else {
-        //if i is at total number of questions move to showResults() and zero timer
-        timeRemaining = 1;
-        return;
-      }
-      // }
+      iterate();
     }
   }
 }
 
-// }
 function showResults() {
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("results").style.display = "block";
-  document.getElementById("results").textContent =
-    "You got " + numCorrect + "/" + numTotal + " questions correct.";
+  quizEl.style.display = "none";
+  resultsEl.style.display = "flex";
+  resultsEl.style.flexDirection = "column";
+  tellScore.textContent =
+    "You got " +
+    numCorrect +
+    "/" +
+    numTotal +
+    " questions correct.  You're final score is " +
+    finalScore +
+    "!";
+  function getUserInfo() {
+    var formEl = document.querySelector("#userInput");
+    var instructions = document.querySelector("#instructions");
+    var userInput = document.querySelector("#input");
+    var submitInitialsBtn = document.querySelector("#submitInitials");
+    instructions.textContent = "Please enter your initials:  ";
+
+    submitInitialsBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      userInitials = userInput.value;
+      var userInfo = {
+        initials: userInitials.trim(),
+        score: finalScore,
+      };
+      var currentHS = localStorage.getItem("userInfo");
+      var newHS = currentHS.concat(userInfo);
+      localStorage.setItem("userInfo", JSON.stringify(newHS));
+    });
+  }
+  getUserInfo();
 }
 
 startQuiz.addEventListener("click", run);
