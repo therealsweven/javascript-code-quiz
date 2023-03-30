@@ -2,7 +2,7 @@ var timeRemaining = 75; //countdown start value
 
 //pointers to references in the HTML doc
 var startQuiz = document.querySelector("#start");
-console.log(startQuiz);
+// console.log(startQuiz);
 var countdownEl = document.getElementById("countdown");
 var quizEl = document.getElementById("quiz");
 var aBut = document.querySelector("#a");
@@ -66,7 +66,7 @@ var Questions = [
     correctAnswer: "console",
   },
 ];
-console.log(Questions);
+// console.log(Questions);
 
 var numCorrect = 0; //number of questions correct
 var numTotal = Questions.length; //total number of questions
@@ -79,6 +79,7 @@ var theseAnswers = ["", "", "", ""]; //empty current question answers array
 
 let i = 0;
 
+// run countdown
 function run() {
   //start countdown
   var timeInterval = setInterval(function () {
@@ -101,6 +102,8 @@ function run() {
     timeRemaining = 0;
   }
 }
+
+// display each Q and As
 function displayQandA() {
   questionEl.textContent = questions[i];
 
@@ -114,6 +117,7 @@ function displayQandA() {
   quizEl.append(questionEl, answersEl);
 }
 
+//run quiz
 function runQuiz() {
   //Show question and answer
   displayQandA();
@@ -159,14 +163,17 @@ function runQuiz() {
 
 // function to show high scores page
 function showHighScores() {
+  viewHS.style.visibility = "hidden";
+  var retakeBtn = document.querySelector(".retakeQuiz");
   resultsEl.style.display = "none";
   quizEl.style.display = "none";
   startQuiz.style.display = "none";
   HSContainer.style.display = "flex";
   HSContainer.style.flexDirection = "column";
-  var highScoresStorage = [JSON.parse(localStorage.getItem("highScores"))];
+  retakeBtn.style.display = "block";
+  var highScoresStorage = JSON.parse(localStorage.getItem("highScores"));
   console.log(highScoresStorage);
-  console.log(highScoresStorage[0].score);
+  //console.log(highScoresStorage[0].score);
   for (j = 0; j < highScoresStorage.length; j++) {
     HSListItem = document.createElement("li");
     HSListItem.textContent =
@@ -179,6 +186,7 @@ function showHighScores() {
     highScoresList.append(HSListItem);
   }
 }
+
 //function to show results and score
 function showResults() {
   quizEl.style.display = "none";
@@ -194,15 +202,14 @@ function showResults() {
     "!";
   //function to grab user input for name and save the score to local storage in an object with the name
   function getUserInfo() {
-    var formEl = document.querySelector("#userInput");
+    var formEl = document.querySelector(".userInput");
     var instructions = document.querySelector("#instructions");
     var userInput = document.querySelector("#input");
-    var submitInitialsBtn = document.querySelector("#submitInitials");
     instructions.textContent = "Please enter your initials:  ";
     //event listener to listen for submit on the name input
-    submitInitialsBtn.addEventListener("click", function (event) {
+    formEl.addEventListener("submit", function (event) {
       event.preventDefault();
-      userInitials = userInput.value;
+      var userInitials = userInput.value;
       var highScoresString = localStorage.getItem("highScores");
       console.log(highScoresString);
       var userInfo = {
@@ -210,14 +217,14 @@ function showResults() {
         score: finalScore,
       };
       if (highScoresString === null) {
-        localStorage.setItem("highScores", JSON.stringify(userInfo));
+        localStorage.setItem("highScores", JSON.stringify([userInfo]));
       } else {
-        var highScores = [JSON.parse(highScoresString)];
+        var highScores = JSON.parse(highScoresString);
         console.log(highScores);
-
-        var newHighScores = highScores.concat(userInfo);
-        console.log(newHighScores);
-        localStorage.setItem("highScores", JSON.stringify(newHighScores));
+        console.log(userInfo);
+        highScores.push(userInfo);
+        console.log(highScores);
+        localStorage.setItem("highScores", JSON.stringify(highScores));
       }
       showHighScores();
     });

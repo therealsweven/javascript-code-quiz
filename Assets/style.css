@@ -111,3 +111,8 @@ button:hover {
 /* #high-scores-list {
   
 } */
+
+.retakeQuiz {
+  display: none;
+  text-decoration: none;
+}
